@@ -255,6 +255,8 @@ Apigee::Edge - Apigee.com 'Edge' management API.
 
 Apigee::Edge is an object-oriented interface to facilitate management of Developers and Apps using the Apigee.com 'Edge' management API. see L<http://apigee.com/docs/api-services/content/api-reference-getting-started>
 
+The API is incompleted. welcome to fork the repos on github L<https://github.com/binary-com/perl-Apigee-Edge> and send us pull-requests.
+
 =head1 METHODS
 
 =head2 new
@@ -492,6 +494,10 @@ The underlaying method to call Apigee when you see something is missing.
     $self->request('DELETE', "/organizations/$org_name/developers/" . uri_escape($email));
     $self->request('POST', "/organizations/$org_name/developers", %args);
     $self->request('PUT', "/organizations/$org_name/developers/" . uri_escape($email), %args);
+
+=head1 GITHUB
+
+L<https://github.com/binary-com/perl-Apigee-Edge>
 
 =head1 AUTHOR
 
