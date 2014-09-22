@@ -5,8 +5,8 @@ use warnings;
 our $VERSION = '0.01';
 
 use Carp;
-use Mojo::JSON;
 use Mojo::UserAgent;
+use Mojo::URL;
 use Mojo::Util qw(b64_encode);
 use URI::Escape qw/uri_escape/;
 
@@ -65,8 +65,11 @@ sub get_apps_by_type {
 }
 
 sub get_apps {
-    my ($self) = @_;
-    $self->request('GET', "/organizations/" . $self->{org} . "/apps");
+    my $self = shift;
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    my $url = Mojo::URL->new("/organizations/" . $self->{org} . "/apps");
+    $url->query(\%args) if %args;
+    $self->request('GET', $url->to_string);
 }
 
 ## Developers http://apigee.com/docs/api/developers-0
@@ -255,6 +258,7 @@ L<http://apigee.com/docs/api/apps-0>
 =head3 get_apps
 
     my $app_ids = $apigee->get_apps();
+    my $apps = $apigee->get_apps(expand => 'true', includeCred => 'true');
 
 =head3 Developers
 

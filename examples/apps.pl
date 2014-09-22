@@ -16,7 +16,7 @@ my $apigee = Apigee::Edge->new(
 );
 
 say "Get Apps...";
-my $apps = $apigee->get_apps();
+my $apps = $apigee->get_apps(expand => 'true', includeCred => 'true');
 say Dumper(\$apps);
 
 
