@@ -46,72 +46,72 @@ sub __ua {
 ## Apps http://apigee.com/docs/api/apps-0
 sub get_app {
     my ($self, $app_id) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/apps/$app_id");
+    $self->request('GET', "/organizations/" . $self->{org} . "/apps/$app_id");
 }
 
 sub get_apps_by_family {
     my ($self, $family) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?appfamily=" . uri_escape($family));
+    $self->request('GET', "/organizations/" . $self->{org} . "/apps?appfamily=" . uri_escape($family));
 }
 
 sub get_apps_by_keystatus {
     my ($self, $keystatus) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?keyStatus=" . uri_escape($keystatus));
+    $self->request('GET', "/organizations/" . $self->{org} . "/apps?keyStatus=" . uri_escape($keystatus));
 }
 
 sub get_apps_by_type {
     my ($self, $type) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?apptype=" . uri_escape($type));
+    $self->request('GET', "/organizations/" . $self->{org} . "/apps?apptype=" . uri_escape($type));
 }
 
 sub get_apps {
     my ($self) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/apps");
+    $self->request('GET', "/organizations/" . $self->{org} . "/apps");
 }
 
 ## Developers http://apigee.com/docs/api/developers-0
 sub create_developer {
     my $self = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
-    $self->__request('POST', "/organizations/" . $self->{org} . "/developers", %args);
+    $self->request('POST', "/organizations/" . $self->{org} . "/developers", %args);
 }
 
 sub get_developer {
     my $self = shift;
     my ($email) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email));
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email));
 }
 
 sub delete_developer {
     my $self = shift;
     my ($email) = @_;
-    $self->__request('DELETE', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email));
+    $self->request('DELETE', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email));
 }
 
 sub get_app_developers {
     my $self = shift;
     my ($app) = @_;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/developers?app=" . uri_escape($app));
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers?app=" . uri_escape($app));
 }
 
 sub get_developers {
     my $self = shift;
-    $self->__request('GET', "/organizations/" . $self->{org} . "/developers");
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers");
 }
 
 sub set_developer_status {
     my ($self, $email, $status);
-    $self->__request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "?action=" . uri_escape($status));
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "?action=" . uri_escape($status));
 }
 
 sub update_developer {
     my $self = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
     my $email = delete $args{email} or croak "email is required.";
-    $self->__request('PUT', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email), %args);
+    $self->request('PUT', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email), %args);
 }
 
-sub __request {
+sub request {
     my ($self, $method, $url, %params) = @_;
 
     my $ua = $self->__ua;
@@ -159,9 +159,9 @@ Apigee::Edge - Apigee.com 'Edge' management API.
 
 Apigee::Edge is an object-oriented interface to facilitate management of Developers and Apps using the Apigee.com 'Edge' management API. see L<http://apigee.com/docs/api-services/content/api-reference-getting-started>
 
-=head2 METHODS
+=head1 METHODS
 
-=head3 new
+=head2 new
 
 =over 4
 
@@ -183,27 +183,27 @@ optional. default to https://api.enterprise.apigee.com/v1
 
 =back
 
-=head3 Apps
+=head2 Apps
 
 L<http://apigee.com/docs/api/apps-0>
 
-=head4 get_app
+=haed3 get_app
 
     my $app = $apigee->get_app($app_id);
 
-=head4 get_apps_by_family
+=haed3 get_apps_by_family
 
     my $app_ids = $apigee->get_apps_by_family($family);
 
-=head4 get_apps_by_keystatus
+=haed3 get_apps_by_keystatus
 
     my $app_ids = $apigee->get_apps_by_keystatus($keystatus);
 
-=head4 get_apps_by_type
+=haed3 get_apps_by_type
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-=head4 get_apps
+=haed3 get_apps
 
     my $app_ids = $apigee->get_apps();
 
@@ -211,7 +211,7 @@ L<http://apigee.com/docs/api/apps-0>
 
 L<http://apigee.com/docs/api/developers-0>
 
-=head4 create_developer
+=haed3 create_developer
 
     my $developer = $apigee->create_developer(
         "email" => 'fayland@binary.com',
@@ -230,27 +230,27 @@ L<http://apigee.com/docs/api/developers-0>
         ]
     );
 
-=head4 delete_developer
+=haed3 delete_developer
 
     my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
 
-=head4 get_developer
+=haed3 get_developer
 
     my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
 
-=head4 get_app_developers
+=haed3 get_app_developers
 
     my $developers = $apigee->get_app_developers($app_name);
 
-=head4 get_developers
+=haed3 get_developers
 
     my $developers = $apigee->get_developers();
 
-=head4 set_developer_status
+=haed3 set_developer_status
 
     my $status = $apigee->set_developer_status($email, $status);
 
-=head4 update_developer
+=haed3 update_developer
 
     my $developer = $apigee->update_developer(
         "email" => 'fayland@binary.com', # primary key
@@ -259,6 +259,15 @@ L<http://apigee.com/docs/api/developers-0>
         "firstName" => "Fayland",
         "lastName" => "Lam",
     );
+
+=head2 request
+
+The underlaying method to call Apigee when you see something is missing.
+
+    $self->request('GET', "/organizations/$org_name/apps/$app_id");
+    $self->request('DELETE', "/organizations/$org_name/developers/" . uri_escape($email));
+    $self->request('POST', "/organizations/$org_name/developers", %args);
+    $self->request('PUT', "/organizations/$org_name/developers/" . uri_escape($email), %args);
 
 =head1 AUTHOR
 
