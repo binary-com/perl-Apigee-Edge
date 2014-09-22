@@ -105,10 +105,59 @@ sub set_developer_status {
 }
 
 sub update_developer {
-    my $self = shift;
+    my $self = shift; my $email = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
-    my $email = delete $args{email} or croak "email is required.";
+    $email or croak "email is required.";
     $self->request('PUT', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email), %args);
+}
+
+## Apps: Developer http://apigee.com/docs/api/apps-developer
+
+sub change_app_status {
+    my ($self, $email, $app) = @_;
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+}
+
+sub create_developer_app {
+    my $self = shift; my $email = shift;
+    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    $self->request('POST', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps", %args);
+}
+
+sub delete_developer_app {
+    my ($self, $email, $app) = @_;
+    $self->request('DELETE', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+}
+
+sub get_developer_app {
+    my ($self, $email, $app) = @_;
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+}
+
+sub get_developer_apps {
+    my ($self, $email) = @_;
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps");
+}
+
+sub update_developer_app {
+    my $self = shift; my $email = shift; my $app = shift;
+    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    $email or croak "email is required.";
+    $app or croak "app is required.";
+    $self->request('PUT', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
+}
+
+sub get_count_of_developer_app_resource {
+    my ($self, $email, $app, $entity) = @_;
+    $self->request('GET', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app) . qq~?"query=count&entity=~ . uri_escape($entity) . qq~"~);
+}
+
+sub regenerate_developer_app_key {
+    my $self = shift; my $email = shift; my $app = shift;
+    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    $email or croak "email is required.";
+    $app or croak "app is required.";
+    $self->request('POST', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
 }
 
 sub request {
@@ -124,7 +173,7 @@ sub request {
     $tx->req->headers->accept('application/json');
 
     $tx = $ua->start($tx);
-    if ($tx->res->headers->content_type =~ 'application/json') {
+    if ($tx->res->headers->content_type and $tx->res->headers->content_type =~ 'application/json') {
         return $tx->res->json;
     }
     if (! $tx->success) {
@@ -253,12 +302,74 @@ L<http://apigee.com/docs/api/developers-0>
 =head3 update_developer
 
     my $developer = $apigee->update_developer(
-        "email" => 'fayland@binary.com', # primary key
-
-        # update parts
-        "firstName" => "Fayland",
-        "lastName" => "Lam",
+        $developer_email,
+        {
+            "firstName" => "Fayland",
+            "lastName" => "Lam",
+        }
     );
+
+=head2 Apps: Developer
+
+L<http://apigee.com/docs/api/apps-developer>
+
+=head3 change_app_status
+
+    my $app = $apigee->change_app_status($developer_email, $app_name);
+
+=head3 create_developer_app
+
+    my $app = $apigee->create_developer_app(
+        $developer_email,
+        {
+            "name" => "Test App",
+            "apiProducts" => [ "{apiproduct1}", "{apiproduct2}", ...],
+            "keyExpiresIn" => "{milliseconds}",
+            "attributes" => [
+                {
+                    "name" => "DisplayName",
+                    "value" => "{display_name_value}"
+                },
+                {
+                    "name" => "Notes",
+                    "value" => "{notes_for_developer_app}"
+                },
+                {
+                    "name" => "{custom_attribute_name}",
+                    "value" => "{custom_attribute_value}"
+                }
+            ],
+            "callbackUrl" => "{url}",
+        }
+    );
+
+=head3 delete_developer_app
+
+    my $app = $apigee->delete_developer_app($developer_email, $app_name);
+
+=head3 get_developer_app
+
+    my $app = $apigee->get_developer_app($developer_email, $app_name);
+
+=head3 get_developer_apps
+
+    my $apps = $apigee->get_developer_apps($developer_email);
+
+=head3 update_developer_app
+
+    my $app = $apigee->update_developer_app($developer_email, $app_name, {
+        # update part
+    });
+
+=head3 regenerate_developer_app_key
+
+    my $app = $apigee->regenerate_developer_app_key($developer_email, $app_name, {
+        # update part
+    });
+
+=head3 get_count_of_developer_app_resource
+
+    my $count = $apigee->get_count_of_developer_app_resource($developer_email, $app_name, $entity_name);
 
 =head2 request
 

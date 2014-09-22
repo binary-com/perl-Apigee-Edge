@@ -31,7 +31,7 @@ my $developer = $apigee->create_developer(
             "value" => "V2.v2"
         }
     ]
-);
+) or die $apigee->errstr;
 say Dumper(\$developer);
 
 sleep 2;

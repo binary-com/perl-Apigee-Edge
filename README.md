@@ -106,12 +106,74 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
 ### update\_developer
 
     my $developer = $apigee->update_developer(
-        "email" => 'fayland@binary.com', # primary key
-
-        # update parts
-        "firstName" => "Fayland",
-        "lastName" => "Lam",
+        $developer_email,
+        {
+            "firstName" => "Fayland",
+            "lastName" => "Lam",
+        }
     );
+
+## Apps: Developer
+
+[http://apigee.com/docs/api/apps-developer](http://apigee.com/docs/api/apps-developer)
+
+### change\_app\_status
+
+    my $app = $apigee->change_app_status($developer_email, $app_name);
+
+### create\_developer\_app
+
+    my $app = $apigee->create_developer_app(
+        $developer_email,
+        {
+            "name" => "Test App",
+            "apiProducts" => [ "{apiproduct1}", "{apiproduct2}", ...],
+            "keyExpiresIn" => "{milliseconds}",
+            "attributes" => [
+                {
+                    "name" => "DisplayName",
+                    "value" => "{display_name_value}"
+                },
+                {
+                    "name" => "Notes",
+                    "value" => "{notes_for_developer_app}"
+                },
+                {
+                    "name" => "{custom_attribute_name}",
+                    "value" => "{custom_attribute_value}"
+                }
+            ],
+            "callbackUrl" => "{url}",
+        }
+    );
+
+### delete\_developer\_app
+
+    my $app = $apigee->delete_developer_app($developer_email, $app_name);
+
+### get\_developer\_app
+
+    my $app = $apigee->get_developer_app($developer_email, $app_name);
+
+### get\_developer\_apps
+
+    my $apps = $apigee->get_developer_apps($developer_email);
+
+### update\_developer\_app
+
+    my $app = $apigee->update_developer_app($developer_email, $app_name, {
+        # update part
+    });
+
+### regenerate\_developer\_app\_key
+
+    my $app = $apigee->regenerate_developer_app_key($developer_email, $app_name, {
+        # update part
+    });
+
+### get\_count\_of\_developer\_app\_resource
+
+    my $count = $apigee->get_count_of_developer_app_resource($developer_email, $app_name, $entity_name);
 
 ## request
 
