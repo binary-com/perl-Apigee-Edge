@@ -163,6 +163,50 @@ sub regenerate_developer_app_key {
     $self->request('POST', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
 }
 
+## API Products http://apigee.com/docs/api/api-products-1
+sub create_api_product {
+    my $self = shift;
+    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    $self->request('POST', "/organizations/" . $self->{org} . "/apiproducts", %args);
+}
+
+sub update_api_product {
+    my $self = shift; my $product = shift;
+    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    $product or croak "product is required.";
+    $self->request('PUT', "/organizations/" . $self->{org} . "/apiproducts/" . uri_escape($product), %args);
+}
+
+sub delete_api_product {
+    my ($self, $product) = @_;
+    $self->request('DELETE', "/organizations/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+}
+
+sub get_api_product {
+    my ($self, $product) = @_;
+    $self->request('GET', "/organizations/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+}
+
+sub get_api_products {
+    my $self = shift;
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    my $url = Mojo::URL->new("/organizations/" . $self->{org} . "/apiproducts");
+    $url->query(\%args) if %args;
+    $self->request('GET', $url->to_string);
+}
+
+sub search_api_products {
+    (shift)->get_api_products(@_);
+}
+
+sub get_api_product_details {
+    my $self = shift; my $product = shift;
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    my $url = Mojo::URL->new("/organizations/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+    $url->query(\%args) if %args;
+    $self->request('GET', $url->to_string);
+}
+
 sub request {
     my ($self, $method, $url, %params) = @_;
 
@@ -243,6 +287,11 @@ L<http://apigee.com/docs/api/apps-0>
 
     my $app = $apigee->get_app($app_id);
 
+=head3 get_apps
+
+    my $app_ids = $apigee->get_apps();
+    my $apps = $apigee->get_apps(expand => 'true', includeCred => 'true');
+
 =head3 get_apps_by_family
 
     my $app_ids = $apigee->get_apps_by_family($family);
@@ -255,14 +304,21 @@ L<http://apigee.com/docs/api/apps-0>
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-=head3 get_apps
-
-    my $app_ids = $apigee->get_apps();
-    my $apps = $apigee->get_apps(expand => 'true', includeCred => 'true');
-
 =head3 Developers
 
 L<http://apigee.com/docs/api/developers-0>
+
+=head3 get_developers
+
+    my $developers = $apigee->get_developers();
+
+=head3 get_app_developers
+
+    my $developers = $apigee->get_app_developers($app_name);
+
+=head3 get_developer
+
+    my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
 
 =head3 create_developer
 
@@ -283,26 +339,6 @@ L<http://apigee.com/docs/api/developers-0>
         ]
     );
 
-=head3 delete_developer
-
-    my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
-
-=head3 get_developer
-
-    my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
-
-=head3 get_app_developers
-
-    my $developers = $apigee->get_app_developers($app_name);
-
-=head3 get_developers
-
-    my $developers = $apigee->get_developers();
-
-=head3 set_developer_status
-
-    my $status = $apigee->set_developer_status($email, $status);
-
 =head3 update_developer
 
     my $developer = $apigee->update_developer(
@@ -312,6 +348,14 @@ L<http://apigee.com/docs/api/developers-0>
             "lastName" => "Lam",
         }
     );
+
+=head3 delete_developer
+
+    my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
+
+=head3 set_developer_status
+
+    my $status = $apigee->set_developer_status($email, $status);
 
 =head2 Apps: Developer
 
@@ -374,6 +418,71 @@ L<http://apigee.com/docs/api/apps-developer>
 =head3 get_count_of_developer_app_resource
 
     my $count = $apigee->get_count_of_developer_app_resource($developer_email, $app_name, $entity_name);
+
+=head2 API Products
+
+L<http://apigee.com/docs/api/api-products-1>
+
+=head3 get_api_products
+
+    my $products = $apigee->get_api_products();
+    my $products = $apigee->get_api_products(expand => 'true');
+
+=head3 search_api_products
+
+    my $products = $apigee->search_api_products('attributename' => 'access', 'attributevalue' => 'public');
+    my $products = $apigee->search_api_products('attributename' => 'access', 'attributevalue' => 'private', expand => 'true');
+
+=head3 get_api_product
+
+    my $product = $apigee->get_api_product($product_name);
+
+=head3 get_api_product_details
+
+    my $apps = $apigee->get_api_product_details(
+        $product_name,
+        query => 'list', entity => 'apps' # or query => 'count', entity => 'keys, apps, developers, or companies'
+    );
+
+=head3 delete_api_product
+
+    my $product = $apigee->delete_api_product($product_name);
+
+=head3 create_api_product
+
+    my $product = $apigee->create_api_product(
+        "approvalType" => "manual",
+        "attributes" => [
+            {
+              "name" => "access",
+              "value" => "private"
+            },
+            {
+              "name" => "ATTR2",
+              "value" => "V2"
+            }
+        ],
+        "description" => "DESC",
+        "displayName" => "TEST PRODUCT NAME",
+        "name"  => "test-product-name",
+        "apiResources" => [ "/resource1", "/resource2"],
+        "environments" => [ "test", "prod"],
+        # "proxies" => ["{proxy1}", "{proxy2}", ...],
+        # "quota" => "{quota}",
+        # "quotaInterval" => "{quota_interval}",
+        # "quotaTimeUnit" => "{quota_unit}",
+        "scopes" => ["user", "repos"]
+    );
+
+=head3 update_api_product
+
+    my $product = $apigee->update_api_product(
+        "test-product-name",
+        {
+            "approvalType" => "auto",
+            "displayName" => "ANOTHER TEST PRODUCT NAME",
+        }
+    );
 
 =head2 request
 

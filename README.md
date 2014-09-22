@@ -44,6 +44,11 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
 
     my $app = $apigee->get_app($app_id);
 
+### get\_apps
+
+    my $app_ids = $apigee->get_apps();
+    my $apps = $apigee->get_apps(expand => 'true', includeCred => 'true');
+
 ### get\_apps\_by\_family
 
     my $app_ids = $apigee->get_apps_by_family($family);
@@ -56,13 +61,21 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-### get\_apps
-
-    my $app_ids = $apigee->get_apps();
-
 ### Developers
 
 [http://apigee.com/docs/api/developers-0](http://apigee.com/docs/api/developers-0)
+
+### get\_developers
+
+    my $developers = $apigee->get_developers();
+
+### get\_app\_developers
+
+    my $developers = $apigee->get_app_developers($app_name);
+
+### get\_developer
+
+    my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
 
 ### create\_developer
 
@@ -83,26 +96,6 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
         ]
     );
 
-### delete\_developer
-
-    my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
-
-### get\_developer
-
-    my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
-
-### get\_app\_developers
-
-    my $developers = $apigee->get_app_developers($app_name);
-
-### get\_developers
-
-    my $developers = $apigee->get_developers();
-
-### set\_developer\_status
-
-    my $status = $apigee->set_developer_status($email, $status);
-
 ### update\_developer
 
     my $developer = $apigee->update_developer(
@@ -112,6 +105,14 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
             "lastName" => "Lam",
         }
     );
+
+### delete\_developer
+
+    my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
+
+### set\_developer\_status
+
+    my $status = $apigee->set_developer_status($email, $status);
 
 ## Apps: Developer
 
@@ -174,6 +175,71 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
 ### get\_count\_of\_developer\_app\_resource
 
     my $count = $apigee->get_count_of_developer_app_resource($developer_email, $app_name, $entity_name);
+
+## API Products
+
+[http://apigee.com/docs/api/api-products-1](http://apigee.com/docs/api/api-products-1)
+
+### get\_api\_products
+
+    my $products = $apigee->get_api_products();
+    my $products = $apigee->get_api_products(expand => 'true');
+
+### search\_api\_products
+
+    my $products = $apigee->search_api_products('attributename' => 'access', 'attributevalue' => 'public');
+    my $products = $apigee->search_api_products('attributename' => 'access', 'attributevalue' => 'private', expand => 'true');
+
+### get\_api\_product
+
+    my $product = $apigee->get_api_product($product_name);
+
+### get\_api\_product\_details
+
+    my $apps = $apigee->get_api_product_details(
+        $product_name,
+        query => 'list', entity => 'apps' # or query => 'count', entity => 'keys, apps, developers, or companies'
+    );
+
+### delete\_api\_product
+
+    my $product = $apigee->delete_api_product($product_name);
+
+### create\_api\_product
+
+    my $product = $apigee->create_api_product(
+        "approvalType" => "manual",
+        "attributes" => [
+            {
+              "name" => "access",
+              "value" => "private"
+            },
+            {
+              "name" => "ATTR2",
+              "value" => "V2"
+            }
+        ],
+        "description" => "DESC",
+        "displayName" => "TEST PRODUCT NAME",
+        "name"  => "test-product-name",
+        "apiResources" => [ "/resource1", "/resource2"],
+        "environments" => [ "test", "prod"],
+        # "proxies" => ["{proxy1}", "{proxy2}", ...],
+        # "quota" => "{quota}",
+        # "quotaInterval" => "{quota_interval}",
+        # "quotaTimeUnit" => "{quota_unit}",
+        "scopes" => ["user", "repos"]
+    );
+
+### update\_api\_product
+
+    my $product = $apigee->update_api_product(
+        "test-product-name",
+        {
+            "approvalType" => "auto",
+            "displayName" => "ANOTHER TEST PRODUCT NAME",
+        }
+    );
 
 ## request
 
