@@ -43,7 +43,33 @@ sub __ua {
     return $ua;
 }
 
-## Developer http://apigee.com/docs/api/developers-0
+## Apps http://apigee.com/docs/api/apps-0
+sub get_app {
+    my ($self, $app_id) = @_;
+    $self->__request('GET', "/organizations/" . $self->{org} . "/apps/$app_id");
+}
+
+sub get_apps_by_family {
+    my ($self, $family) = @_;
+    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?appfamily=" . uri_escape($family));
+}
+
+sub get_apps_by_keystatus {
+    my ($self, $keystatus) = @_;
+    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?keyStatus=" . uri_escape($keystatus));
+}
+
+sub get_apps_by_type {
+    my ($self, $type) = @_;
+    $self->__request('GET', "/organizations/" . $self->{org} . "/apps?apptype=" . uri_escape($type));
+}
+
+sub get_apps {
+    my ($self) = @_;
+    $self->__request('GET', "/organizations/" . $self->{org} . "/apps");
+}
+
+## Developers http://apigee.com/docs/api/developers-0
 sub create_developer {
     my $self = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
@@ -82,7 +108,7 @@ sub update_developer {
     my $self = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
     my $email = delete $args{email} or croak "email is required.";
-    $self->__request('POST', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email), %args);
+    $self->__request('PUT', "/organizations/" . $self->{org} . "/developers/" . uri_escape($email), %args);
 }
 
 sub __request {
@@ -157,7 +183,31 @@ optional. default to https://api.enterprise.apigee.com/v1
 
 =back
 
-=head3 Developer
+=head3 Apps
+
+L<http://apigee.com/docs/api/apps-0>
+
+=head4 get_app
+
+    my $app = $apigee->get_app($app_id);
+
+=head4 get_apps_by_family
+
+    my $app_ids = $apigee->get_apps_by_family($family);
+
+=head4 get_apps_by_keystatus
+
+    my $app_ids = $apigee->get_apps_by_keystatus($keystatus);
+
+=head4 get_apps_by_type
+
+    my $app_ids = $apigee->get_apps_by_type($type);
+
+=head4 get_apps
+
+    my $app_ids = $apigee->get_apps();
+
+=head3 Developers
 
 L<http://apigee.com/docs/api/developers-0>
 

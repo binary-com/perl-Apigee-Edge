@@ -36,7 +36,31 @@ Apigee::Edge is an object-oriented interface to facilitate management of Develop
 
     optional. default to https://api.enterprise.apigee.com/v1
 
-### Developer
+### Apps
+
+[http://apigee.com/docs/api/apps-0](http://apigee.com/docs/api/apps-0)
+
+#### get\_app
+
+    my $app = $apigee->get_app($app_id);
+
+#### get\_apps\_by\_family
+
+    my $app_ids = $apigee->get_apps_by_family($family);
+
+#### get\_apps\_by\_keystatus
+
+    my $app_ids = $apigee->get_apps_by_keystatus($keystatus);
+
+#### get\_apps\_by\_type
+
+    my $app_ids = $apigee->get_apps_by_type($type);
+
+#### get\_apps
+
+    my $app_ids = $apigee->get_apps();
+
+### Developers
 
 [http://apigee.com/docs/api/developers-0](http://apigee.com/docs/api/developers-0)
 
