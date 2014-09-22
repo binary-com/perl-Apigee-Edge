@@ -187,23 +187,23 @@ optional. default to https://api.enterprise.apigee.com/v1
 
 L<http://apigee.com/docs/api/apps-0>
 
-=haed3 get_app
+=head3 get_app
 
     my $app = $apigee->get_app($app_id);
 
-=haed3 get_apps_by_family
+=head3 get_apps_by_family
 
     my $app_ids = $apigee->get_apps_by_family($family);
 
-=haed3 get_apps_by_keystatus
+=head3 get_apps_by_keystatus
 
     my $app_ids = $apigee->get_apps_by_keystatus($keystatus);
 
-=haed3 get_apps_by_type
+=head3 get_apps_by_type
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-=haed3 get_apps
+=head3 get_apps
 
     my $app_ids = $apigee->get_apps();
 
@@ -211,7 +211,7 @@ L<http://apigee.com/docs/api/apps-0>
 
 L<http://apigee.com/docs/api/developers-0>
 
-=haed3 create_developer
+=head3 create_developer
 
     my $developer = $apigee->create_developer(
         "email" => 'fayland@binary.com',
@@ -230,27 +230,27 @@ L<http://apigee.com/docs/api/developers-0>
         ]
     );
 
-=haed3 delete_developer
+=head3 delete_developer
 
     my $developer = $apigee->delete_developer('fayland@binary.com') or die $apigee->errstr;
 
-=haed3 get_developer
+=head3 get_developer
 
     my $developer = $apigee->get_developer('fayland@binary.com') or die $apigee->errstr;
 
-=haed3 get_app_developers
+=head3 get_app_developers
 
     my $developers = $apigee->get_app_developers($app_name);
 
-=haed3 get_developers
+=head3 get_developers
 
     my $developers = $apigee->get_developers();
 
-=haed3 set_developer_status
+=head3 set_developer_status
 
     my $status = $apigee->set_developer_status($email, $status);
 
-=haed3 update_developer
+=head3 update_developer
 
     my $developer = $apigee->update_developer(
         "email" => 'fayland@binary.com', # primary key
