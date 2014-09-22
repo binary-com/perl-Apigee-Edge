@@ -1,7 +1,7 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "Apigee.com 'Edge' management API.",
    "author" : [
-      "Fayland Lam <fayland@gmail.com>"
+      "Binary.com <fayland@binary.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Dist::Milla version v1.0.5, Dist::Zilla version 5.014, CPAN::Meta::Converter version 2.133380",
@@ -26,7 +26,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.038"
+            "ExtUtils::MakeMaker" : "6.30"
          }
       },
       "develop" : {
@@ -36,7 +36,8 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Mojo::UserAgent" : "0",
+            "URI::Escape" : "0"
          }
       },
       "test" : {
@@ -46,6 +47,20 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/binary-com/perl-Apigee-Edge/issues"
+      },
+      "homepage" : "https://github.com/binary-com/perl-Apigee-Edge",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/binary-com/perl-Apigee-Edge.git",
+         "web" : "https://github.com/binary-com/perl-Apigee-Edge"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "Jean-Yves Sireau <jy@binary.com>"
+   ]
 }
 
