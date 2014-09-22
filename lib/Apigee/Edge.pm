@@ -1,26 +1,39 @@
-# NAME
+package Apigee::Edge;
+
+use strict;
+use 5.008_005;
+our $VERSION = '0.01';
+
+1;
+__END__
+
+=encoding utf-8
+
+=head1 NAME
 
 Apigee::Edge - An object-oriented interface to facilitate management of Developers and Apps using the Apigee.com 'Edge' management API.
 
-# SYNOPSIS
+=head1 SYNOPSIS
 
-    use Apigee::Edge;
+  use Apigee::Edge;
 
-# DESCRIPTION
+=head1 DESCRIPTION
 
 Apigee::Edge is
 
-# AUTHOR
+=head1 AUTHOR
 
-Fayland Lam <fayland@gmail.com>
+Fayland Lam E<lt>fayland@gmail.comE<gt>
 
-# COPYRIGHT
+=head1 COPYRIGHT
 
 Copyright 2014- Fayland Lam
 
-# LICENSE
+=head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-# SEE ALSO
+=head1 SEE ALSO
+
+=cut
