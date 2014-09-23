@@ -306,7 +306,7 @@ L<http://apigee.com/docs/api/apps-0>
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-=head3 Developers
+=head2 Developers
 
 L<http://apigee.com/docs/api/developers-0>
 
