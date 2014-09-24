@@ -137,8 +137,13 @@ sub get_developer_app {
 }
 
 sub get_developer_apps {
-    my ($self, $email) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps");
+    my $self = shift; my $email = shift;
+    $email or croak "email is required.";
+
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    my $url = Mojo::URL->new("/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps");
+    $url->query(\%args) if %args;
+    $self->request('GET', $url->to_string);
 }
 
 sub update_developer_app {
@@ -403,6 +408,7 @@ L<http://apigee.com/docs/api/apps-developer>
 =head3 get_developer_apps
 
     my $apps = $apigee->get_developer_apps($developer_email);
+    my $apps = $apigee->get_developer_apps($developer_email, { expand => 'true' });
 
 =head3 update_developer_app
 
