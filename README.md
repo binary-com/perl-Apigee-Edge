@@ -67,7 +67,7 @@ The API is incompleted. welcome to fork the repos on github [https://github.com/
 
     my $app_ids = $apigee->get_apps_by_type($type);
 
-### Developers
+## Developers
 
 [http://apigee.com/docs/api/developers-0](http://apigee.com/docs/api/developers-0)
 
@@ -165,6 +165,7 @@ The API is incompleted. welcome to fork the repos on github [https://github.com/
 ### get\_developer\_apps
 
     my $apps = $apigee->get_developer_apps($developer_email);
+    my $apps = $apigee->get_developer_apps($developer_email, { expand => 'true' });
 
 ### update\_developer\_app
 
@@ -251,10 +252,10 @@ The API is incompleted. welcome to fork the repos on github [https://github.com/
 
 The underlaying method to call Apigee when you see something is missing.
 
-    $self->request('GET', "/organizations/$org_name/apps/$app_id");
-    $self->request('DELETE', "/organizations/$org_name/developers/" . uri_escape($email));
-    $self->request('POST', "/organizations/$org_name/developers", %args);
-    $self->request('PUT', "/organizations/$org_name/developers/" . uri_escape($email), %args);
+    $self->request('GET', "/o/$org_name/apps/$app_id");
+    $self->request('DELETE', "/o/$org_name/developers/" . uri_escape($email));
+    $self->request('POST', "/o/$org_name/developers", %args);
+    $self->request('PUT', "/o/$org_name/developers/" . uri_escape($email), %args);
 
 # GITHUB
 
