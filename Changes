@@ -1,6 +1,7 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+        - replace url /organizations/ to /o/ (actually it's the same)
 
 0.01  2014-09-23 10:37:47 CST
         - Initial release
