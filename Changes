@@ -1,6 +1,7 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+        - add Apigee::Edge::Helper for some common subs
 
 0.02  2014-09-24 13:37:34 CST
         - replace url /organizations/ to /o/ (actually it's the same)
