@@ -22,12 +22,13 @@ my %WriteMakefileArgs = (
   "NAME" => "Apigee::Edge",
   "PREREQ_PM" => {
     "Mojo::UserAgent" => 0,
-    "URI::Escape" => 0
+    "URI::Escape" => 0,
+    "URI::Split" => 0
   },
   "TEST_REQUIRES" => {
     "Test::More" => "0.96"
   },
-  "VERSION" => "0.03",
+  "VERSION" => "0.04",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -37,7 +38,8 @@ my %WriteMakefileArgs = (
 my %FallbackPrereqs = (
   "Mojo::UserAgent" => 0,
   "Test::More" => "0.96",
-  "URI::Escape" => 0
+  "URI::Escape" => 0,
+  "URI::Split" => 0
 );
 
 

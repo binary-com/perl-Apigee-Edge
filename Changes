@@ -1,6 +1,8 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+
+0.04  2014-09-25 21:12:53 CST
         - add URI::Split as requirements
 
 0.03  2014-09-25 21:01:30 CST

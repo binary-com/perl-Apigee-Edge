@@ -2,7 +2,7 @@ package Apigee::Edge::Helper;
 
 use strict;
 use warnings;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use base 'Apigee::Edge';
 use URI::Split qw(uri_split);
