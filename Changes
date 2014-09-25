@@ -1,6 +1,7 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+        - add URI::Split as requirements
 
 0.03  2014-09-25 21:01:30 CST
         - add Apigee::Edge::Helper for some common subs
