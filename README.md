@@ -3,6 +3,7 @@
 [![Gitter chat](https://badges.gitter.im/binary-com/perl-Apigee-Edge.png)](https://gitter.im/binary-com/perl-Apigee-Edge)
 
 # NAME
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/binary-com/perl-Apigee-Edge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Apigee::Edge - Apigee.com 'Edge' management API.
 
