@@ -9,7 +9,7 @@ use Apigee::Edge::Helper;
 use Data::Dumper;
 use Test::More;
 
-skip_all => "ENV APIGEE_ORG/APIGEE_USR/APIGEE_PWD is required to continue."
+plan skip_all => "ENV APIGEE_ORG/APIGEE_USR/APIGEE_PWD is required to continue."
     unless $ENV{APIGEE_ORG} and $ENV{APIGEE_USR} and $ENV{APIGEE_PWD};
 my $apigee = Apigee::Edge::Helper->new(
     org => $ENV{APIGEE_ORG},
