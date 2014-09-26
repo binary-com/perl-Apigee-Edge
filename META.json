@@ -37,8 +37,8 @@
       "runtime" : {
          "requires" : {
             "Mojo::UserAgent" : "0",
-            "URI::Escape" : "0",
-            "URI::Split" : "0"
+            "URI" : "0",
+            "URI::Escape" : "0"
          }
       },
       "test" : {
@@ -59,7 +59,7 @@
          "web" : "https://github.com/binary-com/perl-Apigee-Edge"
       }
    },
-   "version" : "0.04",
+   "version" : "0.05",
    "x_contributors" : [
       "Jean-Yves Sireau <jy@binary.com>"
    ]
