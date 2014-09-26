@@ -41,6 +41,11 @@ is($app->{display_name}, 'Fayland Test App');
 ok($app->{credentials});
 ok($apigee->errstr =~ /registered/);
 
+say "Get Clients...";
+my $clients = $apigee->get_all_clients();
+ok(grep { $_ eq $app->{credentials}->[0]->{consumerKey} } keys %$clients);
+ok(grep { $_ eq 'Fayland Test App' } values %$clients);
+
 say "Update Apps...";
 $app = $apigee->refresh_developer_app(
     app         => $app,
@@ -60,6 +65,11 @@ is($app->{name}, 'Fayland Test App'); # this is not changed
 is($app->{display_name}, 'Fayland Test App Changed');
 ok($app->{credentials});
 ok($apigee->errstr =~ /Update successful/);
+
+say "Get Clients...";
+my $clients = $apigee->get_all_clients();
+ok(grep { $_ eq $app->{credentials}->[0]->{consumerKey} } keys %$clients);
+ok(grep { $_ eq 'Fayland Test App Changed' } values %$clients);
 
 done_testing();
 

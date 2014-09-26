@@ -4,6 +4,7 @@ use strict;
 use warnings;
 our $VERSION = '0.04';
 
+use Carp;
 use base 'Apigee::Edge';
 use URI::Split qw(uri_split);
 
@@ -103,6 +104,27 @@ sub refresh_developer_app {
     return $my_app;
 }
 
+sub get_all_clients {
+    my ($self) = @_;
+
+    my $apps = $self->get_apps(expand => 'true', includeCred => 'true')
+            or croak "Apigee::Edge failure: " . $self->errstr;
+    my $CLIENTS = {};
+    for my $app (@{$apps->{app}}) {
+        next unless $app->{status} eq 'approved';
+        my $consumerKey = eval {
+            my $credentials = $app->{credentials};
+            $credentials->[0]->{consumerKey}
+        } || next;
+        if (my $attrs = $app->{attributes}) {
+            my %attrs = map { $_->{name} => $_->{value} } @$attrs;
+            $app->{name} = $attrs{DisplayName} if $attrs{DisplayName};
+        }
+        $CLIENTS->{$consumerKey} = $app->{name};
+    }
+    return $CLIENTS;
+}
+
 1;
 __END__
 
@@ -151,6 +173,12 @@ get the first app belongs to developer ($email) and flatten attrs into app
 when param B<app> is provided, we'll update the $old_app to $app with name to be a DisplayName attr and callbackUrl updated..
 
 when param B<app> is not provided, we'll first call get_top_developer_app to find the app to update. if app is not created yet, we'll create a new developer on the fly with email/firstName/lastName/userName and created related developer_app with name/callbackUrl and apiProducts.
+
+=head2 get_all_clients
+
+    my $clients = $apigee->get_all_clients();
+
+with consumerKey as key and DisplayName || name as the value.
 
 =head1 GITHUB
 
