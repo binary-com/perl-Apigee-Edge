@@ -9,7 +9,7 @@ use base 'Apigee::Edge';
 use URI::Split qw(uri_split);
 
 use vars qw/$errstr/;
-sub errstr { $errstr };
+sub errstr { $errstr || Apigee::Edge->errstr };
 
 sub get_top_developer_app {
     my ($self, $email) = @_;

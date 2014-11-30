@@ -1,6 +1,7 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+        - little errstr improves
 
 0.05  2014-09-26 08:05:46 CST
         - add helper get_all_clients

@@ -214,6 +214,8 @@ sub get_api_product_details {
 sub request {
     my ($self, $method, $url, %params) = @_;
 
+    $errstr = ''; # reset
+
     my $ua = $self->__ua;
     my $header = {
         Authorization => 'Basic ' . b64_encode($self->{usr} . ':' . $self->{pwd}, '')
@@ -228,7 +230,7 @@ sub request {
         return $tx->res->json;
     }
     if (! $tx->success) {
-        $errstr = $tx->error->{message};
+        $errstr = "Failed to fetch $url: " . $tx->error->{message};
         return;
     }
 
