@@ -1,6 +1,8 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+
+0.06  2014-11-30 18:12:15 CST
         - little errstr improves
 
 0.05  2014-09-26 08:05:46 CST
