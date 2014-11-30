@@ -1,6 +1,7 @@
 Revision history for Apigee-Edge
 
 {{$NEXT}}
+        - increase timeout
 
 0.06  2014-11-30 18:12:15 CST
         - little errstr improves
