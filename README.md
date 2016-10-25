@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/binary-com/perl-Apigee-Edge.svg?branch=master)](https://travis-ci.org/binary-com/perl-Apigee-Edge)
-[![Coverage Status](https://coveralls.io/repos/binary-com/perl-Apigee-Edge/badge.png?branch=master)](https://coveralls.io/r/binary-com/perl-Apigee-Edge?branch=master)
+[![codecov](https://codecov.io/gh/binary-com/perl-Apigee-Edge/branch/master/graph/badge.svg)](https://codecov.io/gh/binary-com/perl-Apigee-Edge)
 [![Gitter chat](https://badges.gitter.im/binary-com/perl-Apigee-Edge.png)](https://gitter.im/binary-com/perl-Apigee-Edge)
 
 # NAME

@@ -17,6 +17,7 @@ before_install:
     - perl -V
     - "cpanm Mojo::UserAgent"
     - "cpanm Test::More"
+    - "cpanm -qn Test::Requires::Git"
     - "cpanm Devel::Cover::Report::Coveralls"
 script:
-  perl Makefile.PL && make test && cover -test -report coveralls
+  perl Makefile.PL && make test && cover -test -report codecov
