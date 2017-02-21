@@ -2,7 +2,7 @@ package Apigee::Edge::Helper;
 
 use strict;
 use warnings;
-our $VERSION = '0.07';
+## VERSION
 
 use Carp;
 use base 'Apigee::Edge';
