@@ -11,18 +11,18 @@ use Mojo::Util qw(b64_encode);
 use URI::Escape qw/uri_escape/;
 
 use vars qw/$errstr/;
-sub errstr { $errstr }
+sub errstr { return $errstr }
 
-sub new {
+sub new {    ## no critic (ArgUnpacking)
     my $class = shift;
-    my %args  = @_ % 2 ? %{$_[0]} : @_;
+    my %args = @_ % 2 ? %{$_[0]} : @_;
 
     for (qw/org usr pwd/) {
         $args{$_} || croak "Param $_ is required.";
     }
 
     $args{endpoint} ||= 'https://api.enterprise.apigee.com/v1';
-    $args{timeout}  ||= 60; # for ua timeout
+    $args{timeout}  ||= 60;                                       # for ua timeout
 
     return bless \%args, $class;
 }
@@ -35,7 +35,7 @@ sub __ua {
     my $ua = Mojo::UserAgent->new;
     $ua->max_redirects(3);
     $ua->inactivity_timeout($self->{timeout});
-    $ua->proxy->detect; # env proxy
+    $ua->proxy->detect;    # env proxy
     $ua->cookie_jar(0);
     $ua->max_connections(100);
     $self->{ua} = $ua;
@@ -46,180 +46,196 @@ sub __ua {
 ## Apps http://apigee.com/docs/api/apps-0
 sub get_app {
     my ($self, $app_id) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/apps/$app_id");
+    return $self->request('GET', "/o/" . $self->{org} . "/apps/$app_id");
 }
 
 sub get_apps_by_family {
     my ($self, $family) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/apps?appfamily=" . uri_escape($family));
+    return $self->request('GET', "/o/" . $self->{org} . "/apps?appfamily=" . uri_escape($family));
 }
 
 sub get_apps_by_keystatus {
     my ($self, $keystatus) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/apps?keyStatus=" . uri_escape($keystatus));
+    return $self->request('GET', "/o/" . $self->{org} . "/apps?keyStatus=" . uri_escape($keystatus));
 }
 
 sub get_apps_by_type {
     my ($self, $type) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/apps?apptype=" . uri_escape($type));
+    return $self->request('GET', "/o/" . $self->{org} . "/apps?apptype=" . uri_escape($type));
 }
 
-sub get_apps {
+sub get_apps {    ## no critic (ArgUnpacking)
     my $self = shift;
     my %args = @_ % 2 ? %{$_[0]} : @_;
-    my $url = Mojo::URL->new("/o/" . $self->{org} . "/apps");
+    my $url  = Mojo::URL->new("/o/" . $self->{org} . "/apps");
     $url->query(\%args) if %args;
-    $self->request('GET', $url->to_string);
+    return $self->request('GET', $url->to_string);
 }
 
 ## Developers http://apigee.com/docs/api/developers-0
 sub create_developer {
     my $self = shift;
-    my %args  = @_ % 2 ? %{$_[0]} : @_;
-    $self->request('POST', "/o/" . $self->{org} . "/developers", %args);
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    return $self->request('POST', "/o/" . $self->{org} . "/developers", %args);
 }
 
 sub get_developer {
     my $self = shift;
     my ($email) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email));
+    return $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email));
 }
 
 sub delete_developer {
     my $self = shift;
     my ($email) = @_;
-    $self->request('DELETE', "/o/" . $self->{org} . "/developers/" . uri_escape($email));
+    return $self->request('DELETE', "/o/" . $self->{org} . "/developers/" . uri_escape($email));
 }
 
 sub get_app_developers {
     my $self = shift;
     my ($app) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers?app=" . uri_escape($app));
+    return $self->request('GET', "/o/" . $self->{org} . "/developers?app=" . uri_escape($app));
 }
 
 sub get_developers {
     my $self = shift;
-    $self->request('GET', "/o/" . $self->{org} . "/developers");
+    return $self->request('GET', "/o/" . $self->{org} . "/developers");
 }
 
 sub set_developer_status {
     my ($self, $email, $status);
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "?action=" . uri_escape($status));
+    return $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "?action=" . uri_escape($status));
 }
 
-sub update_developer {
-    my $self = shift; my $email = shift;
+sub update_developer {    ## no critic (ArgUnpacking)
+    my $self  = shift;
+    my $email = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
     $email or croak "email is required.";
-    $self->request('PUT', "/o/" . $self->{org} . "/developers/" . uri_escape($email), %args);
+    return $self->request('PUT', "/o/" . $self->{org} . "/developers/" . uri_escape($email), %args);
 }
 
 ## Apps: Developer http://apigee.com/docs/api/apps-developer
 sub change_app_status {
     my ($self, $email, $app) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+    return $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
 }
 
-sub create_developer_app {
-    my $self = shift; my $email = shift;
+sub create_developer_app {    ## no critic (ArgUnpacking)
+    my $self  = shift;
+    my $email = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
-    $self->request('POST', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps", %args);
+    return $self->request('POST', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps", %args);
 }
 
 sub delete_developer_app {
     my ($self, $email, $app) = @_;
-    $self->request('DELETE', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+    return $self->request('DELETE', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
 }
 
 sub get_developer_app {
     my ($self, $email, $app) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
+    return $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app));
 }
 
-sub get_developer_apps {
-    my $self = shift; my $email = shift;
+sub get_developer_apps {    ## no critic (ArgUnpacking)
+    my $self  = shift;
+    my $email = shift;
     $email or croak "email is required.";
 
     my %args = @_ % 2 ? %{$_[0]} : @_;
     my $url = Mojo::URL->new("/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps");
     $url->query(\%args) if %args;
-    $self->request('GET', $url->to_string);
+    return $self->request('GET', $url->to_string);
 }
 
-sub update_developer_app {
-    my $self = shift; my $email = shift; my $app = shift;
+sub update_developer_app {    ## no critic (ArgUnpacking)
+    my $self  = shift;
+    my $email = shift;
+    my $app   = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
     $email or croak "email is required.";
-    $app or croak "app is required.";
-    $self->request('PUT', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
+    $app   or croak "app is required.";
+    return $self->request('PUT', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
 }
 
 sub get_count_of_developer_app_resource {
     my ($self, $email, $app, $entity) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app) . qq~?"query=count&entity=~ . uri_escape($entity) . qq~"~);
+    return $self->request('GET',
+              "/o/"
+            . $self->{org}
+            . "/developers/"
+            . uri_escape($email)
+            . "/apps/"
+            . uri_escape($app)
+            . qq~?"query=count&entity=~
+            . uri_escape($entity)
+            . qq~"~);
 }
 
-sub regenerate_developer_app_key {
-    my $self = shift; my $email = shift; my $app = shift;
+sub regenerate_developer_app_key {    ## no critic (ArgUnpacking)
+    my $self  = shift;
+    my $email = shift;
+    my $app   = shift;
     my %args  = @_ % 2 ? %{$_[0]} : @_;
     $email or croak "email is required.";
-    $app or croak "app is required.";
-    $self->request('POST', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
+    $app   or croak "app is required.";
+    return $self->request('POST', "/o/" . $self->{org} . "/developers/" . uri_escape($email) . "/apps/" . uri_escape($app), %args);
 }
 
 ## API Products http://apigee.com/docs/api/api-products-1
-sub create_api_product {
+sub create_api_product {              ## no critic (ArgUnpacking)
     my $self = shift;
-    my %args  = @_ % 2 ? %{$_[0]} : @_;
-    $self->request('POST', "/o/" . $self->{org} . "/apiproducts", %args);
+    my %args = @_ % 2 ? %{$_[0]} : @_;
+    return $self->request('POST', "/o/" . $self->{org} . "/apiproducts", %args);
 }
 
-sub update_api_product {
-    my $self = shift; my $product = shift;
-    my %args  = @_ % 2 ? %{$_[0]} : @_;
+sub update_api_product {              ## no critic (ArgUnpacking)
+    my $self    = shift;
+    my $product = shift;
+    my %args    = @_ % 2 ? %{$_[0]} : @_;
     $product or croak "product is required.";
-    $self->request('PUT', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product), %args);
+    return $self->request('PUT', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product), %args);
 }
 
 sub delete_api_product {
     my ($self, $product) = @_;
-    $self->request('DELETE', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+    return $self->request('DELETE', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
 }
 
 sub get_api_product {
     my ($self, $product) = @_;
-    $self->request('GET', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+    return $self->request('GET', "/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
 }
 
-sub get_api_products {
+sub get_api_products {    ## no critic (ArgUnpacking)
     my $self = shift;
     my %args = @_ % 2 ? %{$_[0]} : @_;
-    my $url = Mojo::URL->new("/o/" . $self->{org} . "/apiproducts");
+    my $url  = Mojo::URL->new("/o/" . $self->{org} . "/apiproducts");
     $url->query(\%args) if %args;
-    $self->request('GET', $url->to_string);
+    return $self->request('GET', $url->to_string);
 }
 
 sub search_api_products {
-    (shift)->get_api_products(@_);
+    return (shift)->get_api_products(@_);
 }
 
-sub get_api_product_details {
-    my $self = shift; my $product = shift;
-    my %args = @_ % 2 ? %{$_[0]} : @_;
-    my $url = Mojo::URL->new("/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
+sub get_api_product_details {    ## no critic (ArgUnpacking)
+    my $self    = shift;
+    my $product = shift;
+    my %args    = @_ % 2 ? %{$_[0]} : @_;
+    my $url     = Mojo::URL->new("/o/" . $self->{org} . "/apiproducts/" . uri_escape($product));
     $url->query(\%args) if %args;
-    $self->request('GET', $url->to_string);
+    return $self->request('GET', $url->to_string);
 }
 
 sub request {
     my ($self, $method, $url, %params) = @_;
 
-    $errstr = ''; # reset
+    $errstr = '';                # reset
 
     my $ua = $self->__ua;
-    my $header = {
-        Authorization => 'Basic ' . b64_encode($self->{usr} . ':' . $self->{pwd}, '')
-    };
+    my $header = {Authorization => 'Basic ' . b64_encode($self->{usr} . ':' . $self->{pwd}, '')};
     $header->{'Content-Type'} = 'application/json' if %params;
     my @extra = %params ? (json => \%params) : ();
     my $tx = $ua->build_tx($method => $self->{endpoint} . $url => $header => @extra);
@@ -229,7 +245,7 @@ sub request {
     if ($tx->res->headers->content_type and $tx->res->headers->content_type =~ 'application/json') {
         return $tx->res->json;
     }
-    if (! $tx->success) {
+    if (!$tx->success) {
         $errstr = "Failed to fetch $url: " . $tx->error->{message};
         return;
     }
@@ -501,6 +517,8 @@ The underlaying method to call Apigee when you see something is missing.
     $self->request('DELETE', "/o/$org_name/developers/" . uri_escape($email));
     $self->request('POST', "/o/$org_name/developers", %args);
     $self->request('PUT', "/o/$org_name/developers/" . uri_escape($email), %args);
+
+=head2 errstr
 
 =head1 GITHUB
 

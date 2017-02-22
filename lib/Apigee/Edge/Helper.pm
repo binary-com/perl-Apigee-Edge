@@ -9,46 +9,46 @@ use base 'Apigee::Edge';
 use URI::Split qw(uri_split);
 
 use vars qw/$errstr/;
-sub errstr { $errstr || Apigee::Edge->errstr };
+sub errstr { return $errstr || Apigee::Edge->errstr }
 
 sub get_top_developer_app {
     my ($self, $email) = @_;
 
-    my $apps = $self->get_developer_apps($email, { expand => 'true' });
+    my $apps = $self->get_developer_apps($email, {expand => 'true'});
     return unless ($apps and $apps->{app} and scalar(@{$apps->{app}}));
 
     my $my_app = $apps->{app}->[0];
 
     # flatten attrs into $my_app
     my %attrs = map { $_->{name} => $_->{value} } @{$my_app->{attributes}};
-    $my_app = { %$my_app, %attrs };
+    $my_app = {%$my_app, %attrs};
 
-    $my_app->{display_name} = $attrs{DisplayName} || $my_app->{name}; # shortcut
+    $my_app->{display_name} = $attrs{DisplayName} || $my_app->{name};    # shortcut
 
     return $my_app;
 }
 
-sub refresh_developer_app {
+sub refresh_developer_app {                                              ## no critic (ArgUnpacking)
     my $self = shift;
     my %params = @_ % 2 ? %{$_[0]} : @_;
 
     my $name = $params{name};
-    if (! $name) {
+    if (!$name) {
         $errstr = 'Application Name must be provided.';
         return;
-    } elsif ($name !~ /^[\w\s-]{5,30}$/) {    # restrict to only 5-30 alphanumerics or spaces.
+    } elsif ($name !~ /^[\w\s-]{5,30}$/) {                               # restrict to only 5-30 alphanumerics or spaces.
         $errstr = 'Application Name data is invalid.';
         return;
     }
     my $callback_url = $params{callbackUrl};
-    if (! $callback_url) {
+    if (!$callback_url) {
         $errstr = 'Callback URL must be provided.';
         return;
-    } elsif ($callback_url =~ /['"<>]/) { # rule out quotes or anglebrackets.
+    } elsif ($callback_url =~ /['"<>]/) {                                # rule out quotes or anglebrackets.
         $errstr = 'Callback URL data is invalid.';
         return;
     } else {
-        my ($scheme, $host, $path, $query, $frag) = uri_split($callback_url);
+        my ($scheme, $host, $path) = uri_split($callback_url);
         # in theory a uri can be almost anything; but for sanity insist on at least this much..
         unless ($scheme && $host && $path) {
             $errstr = 'Callback URL format is invalid. ';
@@ -64,19 +64,23 @@ sub refresh_developer_app {
 
     if ($my_app) {
         # update app
-        $self->update_developer_app($email, $my_app->{name}, {
-            attributes => [{
-                name  => 'DisplayName',
-                value => $name,
-            }],
-            callbackUrl => $callback_url,
-        });
+        $self->update_developer_app(
+            $email,
+            $my_app->{name},
+            {
+                attributes => [{
+                        name  => 'DisplayName',
+                        value => $name,
+                    }
+                ],
+                callbackUrl => $callback_url,
+            });
         $my_app->{display_name} = $name;
-        $my_app->{callbackUrl} = $callback_url;
-        $errstr = 'Update successful';
+        $my_app->{callbackUrl}  = $callback_url;
+        $errstr                 = 'Update successful';
     } else {
         my $developer = $self->get_developer($email);
-        unless ($developer and $developer->{developerId}) { # create on demand
+        unless ($developer and $developer->{developerId}) {    # create on demand
             $developer = $self->create_developer(
                 "email"     => $email,
                 "firstName" => $params{firstName},
@@ -91,8 +95,7 @@ sub refresh_developer_app {
                 name        => $name,
                 callbackUrl => $callback_url,
                 $params{apiProducts} ? (apiProducts => $params{apiProducts}) : (),
-            }
-        );
+            });
         if ($my_app->{message}) {
             $errstr = $my_app->{message};
             return;
@@ -107,14 +110,16 @@ sub refresh_developer_app {
 sub get_all_clients {
     my ($self) = @_;
 
-    my $apps = $self->get_apps(expand => 'true', includeCred => 'true')
-            or croak "Apigee::Edge failure: " . $self->errstr;
+    my $apps = $self->get_apps(
+        expand      => 'true',
+        includeCred => 'true'
+    ) or croak "Apigee::Edge failure: " . $self->errstr;
     my $CLIENTS = {};
     for my $app (@{$apps->{app}}) {
         next unless $app->{status} eq 'approved';
         my $consumerKey = eval {
             my $credentials = $app->{credentials};
-            $credentials->[0]->{consumerKey}
+            $credentials->[0]->{consumerKey};
         } || next;
         if (my $attrs = $app->{attributes}) {
             my %attrs = map { $_->{name} => $_->{value} } @$attrs;
@@ -179,6 +184,8 @@ when param B<app> is not provided, we'll first call get_top_developer_app to fin
     my $clients = $apigee->get_all_clients();
 
 with consumerKey as key and DisplayName || name as the value.
+
+=head2 errstr
 
 =head1 GITHUB
 
